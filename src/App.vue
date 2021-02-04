@@ -1,110 +1,106 @@
 <template>
- <div id="app">
-   <router-view />
- </div>
+  <div id="app">
+    <div class="container">
+      <div class="card">
+        <p>Todo List</p>
+        <span></span><input v-model="task" class="input-add" />
+        <button class="add" v-on:click="addTodo">追加</button>
+        <todo-list v-on:remove="removeTodo" v-bind:items="todos"></todo-list>
+      </div>
+    </div>
+  </div>
 </template>
 
+<script>
+import TodoList from "../src/components/TodoList.vue";
+
+export default {
+  name: "app",
+  components: {
+    TodoList,
+  },
+  data: function() {
+    return {
+      task: "",
+      todos: [],
+      count: 0,
+    };
+  },
+  methods: {
+    addTodo: function() {
+      if (this.task === "") {
+        alert("作業名を入力してください");
+        return;
+      }
+      this.todos.push({
+        message: this.task,
+        id: ++this.count,
+      });
+      this.task = "";
+    },
+    removeTodo: function(event, index) {
+      this.todos.splice(index, 1);
+    },
+    editTodo: function(event, index) {
+      this.todos.splice(index, 1);
+    },
+  },
+  mounted: function() {
+    this.todos = JSON.parse(localStorage.getItem("todos")) || [];
+    // this.todos = [];
+    const todos = this.todos;
+    this.count = this.todos.length;
+    window.onbeforeunload = function() {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    };
+  },
+};
+</script>
+
 <style>
-html, body, div, span, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-abbr, address, cite, code,
-del, dfn, em, img, ins, kbd, q, samp,
-small, strong, sub, sup, var,
-b, i,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section, summary,
-time, mark, audio, video {
-    margin:0;
-    padding:0;
-    border:0;
-    outline:0;
-    font-size:100%;
-    vertical-align:baseline;
-    background:transparent;
+.container {
+  background-color: #2d197c;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
 }
 
-body {
-    line-height:1;
+.card {
+  background-color: #fff;
+  width: 50vw;
+  padding: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 24px;
 }
 
-article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section {
-    display:block;
+.input-add {
+  width: 80%;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 14px;
+  outline: none;
 }
 
-nav ul {
-    list-style:none;
-}
-
-blockquote, q {
-    quotes:none;
-}
-
-blockquote:before, blockquote:after,
-q:before, q:after {
-    content:'';
-    content:none;
-}
-
-a {
-    margin:0;
-    padding:0;
-    font-size:100%;
-    vertical-align:baseline;
-    background:transparent;
-}
-
-/* change colours to suit your needs */
-ins {
-    background-color:#ff9;
-    color:#000;
-    text-decoration:none;
-}
-
-/* change colours to suit your needs */
-mark {
-    background-color:#ff9;
-    color:#000;
-    font-style:italic;
-    font-weight:bold;
-}
-
-del {
-    text-decoration: line-through;
-}
-
-abbr[title], dfn[title] {
-    border-bottom:1px dotted;
-    cursor:help;
-}
-
-table {
-    border-collapse:collapse;
-    border-spacing:0;
-}
-
-/* change border colour to suit your needs */
-hr {
-    display:block;
-    height:1px;
-    border:0;  
-    border-top:1px solid #cccccc;
-    margin:1em 0;
-    padding:0;
-}
-
-input, select {
-    vertical-align:middle;
-}
-
-html {
-  background-color: #15202b;
-}
-* {
-  color: white;
-  font-family: "Noto Sans JP";
+.add {
+  text-align: left;
+  border: 2px solid #dc70fa;
+  font-size: 12px;
+  color: #dc70fa;
+  background-color: #fff;
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.4s;
+  outline: none;
 }
 </style>
