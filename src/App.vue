@@ -1,109 +1,110 @@
 <template>
-  <div id="app">
-    <h1>Todo List</h1>
-    <div class="new">
-      <div class="name">
-        <input type="text" name="name" id="name" v-model="newName" />
-      </div>
-      <button @click="insertContact">追加</button>
-    </div>
-    <div class="table">
-      <table>
-        <tr>
-          <th>更新</th>
-          <th>削除</th>
-        </tr>
-        <tr v-for="item in contactLists" :key="item.id">
-          <td>{{ item.id }}</td>
-          <td>
-            <input type="text" v-model="item.name" />
-          </td>
-          <td>
-            <input type="email" v-model="item.email" />
-          </td>
-          <td>
-            <button @click="updateContact(item.id, item.name, item.email)">
-              更新
-            </button>
-          </td>
-          <td>
-            <button @click="deleteContact(item.id)">削除</button>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
+ <div id="app">
+   <router-view />
+ </div>
 </template>
 
-<script>
-import axios from "axios";
-export default {
-  data() {
-    return {
-      newName: "",
-      newEmail: "",
-      contactLists: [],
-    };
-  },
-  methods: {
-    async getContact() {
-      const resData = await axios.get("<http://127.0.0.1:8000/api/contact/>");
-      this.contactLists = resData.data.data;
-    },
-    async insertContact() {
-      const sendData = {
-        name: this.newName,
-        email: this.newEmail,
-      };
-      await axios.post("<http://127.0.0.1:8000/api/contact/>", sendData);
-      await this.getContact();
-    },
-    async updateContact(id, name, email) {
-      const sendData = {
-        name: name,
-        email: email,
-      };
-      await axios.put("<http://127.0.0.1:8000/api/contact/>" + id, sendData);
-      await this.getContact();
-    },
-    async deleteContact(id) {
-      await axios.delete("<http://127.0.0.1:8000/api/contact/>" + id);
-      await this.getContact();
-    },
-  },
-  created() {
-    this.getContact();
-  },
-};
-</script>
-
 <style>
-.app {
-  width: 300px;
-  padding: 20px 12px 10px;
-  color: #333;
-  border: 1px solid #e9eaea;
-  border-radius: 3px;
-  transition: 0.3s;
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
 }
 
-.new.name{
- margin: 0;
+body {
+    line-height:1;
 }
 
+article,aside,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section {
+    display:block;
+}
 
-table,
-td,
-th {
-  border: 1px solid #000;
-  border-collapse: collapse;
-  text-align: center;
+nav ul {
+    list-style:none;
 }
-td,
-th {
-  padding: 5px;
+
+blockquote, q {
+    quotes:none;
 }
-th {
-  background: #f0e6cc;
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+
+a {
+    margin:0;
+    padding:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color:#ff9;
+    color:#000;
+    font-style:italic;
+    font-weight:bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+    border-bottom:1px dotted;
+    cursor:help;
+}
+
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+/* change border colour to suit your needs */
+hr {
+    display:block;
+    height:1px;
+    border:0;  
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+
+input, select {
+    vertical-align:middle;
+}
+
+html {
+  background-color: #15202b;
+}
+* {
+  color: white;
+  font-family: "Noto Sans JP";
 }
 </style>
