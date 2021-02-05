@@ -3,7 +3,8 @@
     <div class="container">
       <div class="card">
         <p>Todo List</p>
-        <span></span><input v-model="task" class="input-add" />
+        <span></span>
+        <input v-model="task" class="input-add" />
         <button class="add" v-on:click="addTodo">追加</button>
         <todo-list v-on:remove="removeTodo" v-bind:items="todos"></todo-list>
       </div>
@@ -17,13 +18,13 @@ import TodoList from "../src/components/TodoList.vue";
 export default {
   name: "app",
   components: {
-    TodoList,
+    TodoList
   },
   data: function() {
     return {
       task: "",
       todos: [],
-      count: 0,
+      count: 0
     };
   },
   methods: {
@@ -34,16 +35,21 @@ export default {
       }
       this.todos.push({
         message: this.task,
-        id: ++this.count,
+        id: ++this.count
       });
       this.task = "";
+      this.cancel();
     },
-    removeTodo: function(event, index) {
-      this.todos.splice(index, 1);
+    cancel() {
+      this.text = "";
+      this.editIndex = -1;
     },
     editTodo: function(event, index) {
       this.todos.splice(index, 1);
     },
+    removeTodo: function(event, index) {
+      this.todos.splice(index, 1);
+    }
   },
   mounted: function() {
     this.todos = JSON.parse(localStorage.getItem("todos")) || [];
@@ -53,7 +59,7 @@ export default {
     window.onbeforeunload = function() {
       localStorage.setItem("todos", JSON.stringify(todos));
     };
-  },
+  }
 };
 </script>
 
